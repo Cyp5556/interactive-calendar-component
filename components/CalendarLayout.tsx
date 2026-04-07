@@ -10,17 +10,37 @@ export default function CalendarLayout() {
     const currentYear = 2026;
 
     return (
-        <div className="min-h-screen flex items-center justify-center p-4 md:p-8 lg:p-12">
+        <div className="min-h-screen flex items-center justify-center px-4 py-6 sm:px-6 sm:py-8 md:p-10 lg:p-12">
             <motion.div
-                className="w-full max-w-6xl"
+                className="w-full max-w-[1100px]"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, ease: "easeOut" }}
             >
-                {/* Main Grid: Hero+Calendar (left) | Notes (right) */}
-                <div className="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-6 items-start">
-                    {/* ─── Left Panel: Calendar Card ─── */}
-                    <div className="calendar-card">
+                {/* ── Title ── */}
+                <motion.div
+                    className="text-center mb-6 sm:mb-8"
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.15, duration: 0.5 }}
+                >
+                    <p
+                        className="text-[11px] font-semibold tracking-[0.3em] uppercase"
+                        style={{ color: "var(--muted)" }}
+                    >
+                        Interactive Calendar
+                    </p>
+                </motion.div>
+
+                {/* ── Main Grid: Calendar (left) | Notes (right) ── */}
+                <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] xl:grid-cols-[1fr_360px] gap-5 sm:gap-6 lg:gap-7 items-start">
+                    {/* ─── Left Panel: Wall Calendar Card ─── */}
+                    <motion.div
+                        className="calendar-card"
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.1, duration: 0.5 }}
+                    >
                         {/* Hero Image */}
                         <HeroImage
                             month={currentMonth}
@@ -28,50 +48,96 @@ export default function CalendarLayout() {
                             imageSrc="/hero-april.png"
                         />
 
-                        {/* Month Navigation */}
-                        <div className="flex items-center justify-between px-5 py-3 border-b"
-                            style={{ borderColor: "var(--card-border)" }}
-                        >
-                            <button className="month-nav-btn" aria-label="Previous month">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        {/* Separator — tear-edge effect */}
+                        <div className="calendar-separator" />
+
+                        {/* Month Navigation Bar */}
+                        <div className="month-nav-bar">
+                            <motion.button
+                                className="month-nav-btn"
+                                aria-label="Previous month"
+                                whileHover={{ scale: 1.1 }}
+                                whileTap={{ scale: 0.9 }}
+                            >
+                                <svg
+                                    width="16"
+                                    height="16"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2.5"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                >
                                     <polyline points="15 18 9 12 15 6" />
                                 </svg>
-                            </button>
+                            </motion.button>
 
-                            <h3
-                                className="text-lg font-bold tracking-tight"
-                                style={{ fontFamily: "var(--font-display)" }}
+                            <div className="text-center">
+                                <h3
+                                    className="text-xl sm:text-2xl font-bold tracking-tight"
+                                    style={{ fontFamily: "var(--font-display)" }}
+                                >
+                                    {currentMonth}
+                                </h3>
+                                <p
+                                    className="text-[11px] font-medium tracking-widest uppercase -mt-0.5"
+                                    style={{ color: "var(--muted)" }}
+                                >
+                                    {currentYear}
+                                </p>
+                            </div>
+
+                            <motion.button
+                                className="month-nav-btn"
+                                aria-label="Next month"
+                                whileHover={{ scale: 1.1 }}
+                                whileTap={{ scale: 0.9 }}
                             >
-                                {currentMonth} {currentYear}
-                            </h3>
-
-                            <button className="month-nav-btn" aria-label="Next month">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <svg
+                                    width="16"
+                                    height="16"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2.5"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                >
                                     <polyline points="9 6 15 12 9 18" />
                                 </svg>
-                            </button>
+                            </motion.button>
                         </div>
 
                         {/* Calendar Grid */}
                         <CalendarGrid />
-                    </div>
+                    </motion.div>
 
                     {/* ─── Right Panel: Notes ─── */}
-                    <div className="lg:sticky lg:top-8">
+                    <motion.div
+                        className="lg:sticky lg:top-8"
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.25, duration: 0.5 }}
+                    >
                         <NotesPanel />
-                    </div>
+                    </motion.div>
                 </div>
 
-                {/* Footer branding */}
-                <motion.p
-                    className="text-center text-xs mt-6 tracking-wider"
-                    style={{ color: "var(--muted)" }}
+                {/* ── Footer ── */}
+                <motion.div
+                    className="text-center mt-7 sm:mt-9"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ delay: 1 }}
+                    transition={{ delay: 1.1 }}
                 >
-                    ✦ Interactive Calendar Component
-                </motion.p>
+                    <p
+                        className="text-[10px] tracking-[0.25em] uppercase font-medium"
+                        style={{ color: "var(--muted-light)" }}
+                    >
+                        ✦ Built with Next.js · Ant Design · Framer Motion ✦
+                    </p>
+                </motion.div>
             </motion.div>
         </div>
     );

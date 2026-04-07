@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 const DAYS_OF_WEEK = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 // Static placeholder for April 2026
-const PLACEHOLDER_DAYS = [
+const PLACEHOLDER_DAYS: (number | null)[] = [
     // Row 1: April starts on Wednesday (index 3)
     null, null, null, 1, 2, 3, 4,
     // Row 2
@@ -23,61 +23,105 @@ const containerVariants = {
     visible: {
         opacity: 1,
         transition: {
-            staggerChildren: 0.015,
-            delayChildren: 0.2,
+            staggerChildren: 0.02,
+            delayChildren: 0.15,
         },
     },
 };
 
 const cellVariants = {
-    hidden: { opacity: 0, scale: 0.8 },
+    hidden: { opacity: 0, y: 8, scale: 0.85 },
     visible: {
         opacity: 1,
+        y: 0,
         scale: 1,
-        transition: { type: "spring", stiffness: 300, damping: 24 },
+        transition: { type: "spring", stiffness: 400, damping: 25 },
     },
 };
 
 export default function CalendarGrid() {
-    const today = 8; // April 8, 2026 — current date
+    const today = 8; // April 8, 2026
+
+    /**
+     * Check if a given index falls on a weekend column (Sun=0, Sat=6)
+     */
+    const isWeekend = (index: number) => {
+        const col = index % 7;
+        return col === 0 || col === 6;
+    };
 
     return (
-        <div className="px-4 py-3 md:px-5 md:py-4">
+        <div className="px-4 py-4 sm:px-5 md:px-6 md:py-5">
             {/* Weekday headers */}
-            <div className="calendar-grid-header mb-2">
+            <div className="calendar-grid-header mb-1">
                 {DAYS_OF_WEEK.map((day) => (
                     <span key={day}>{day}</span>
                 ))}
             </div>
 
-            {/* Day cells - static placeholder */}
+            {/* Day cells */}
             <motion.div
                 className="calendar-grid-body"
                 variants={containerVariants}
                 initial="hidden"
                 animate="visible"
             >
-                {PLACEHOLDER_DAYS.map((day, index) => (
-                    <motion.div
-                        key={index}
-                        variants={cellVariants}
-                        className={`day-cell ${day === null ? "day-cell--disabled invisible" : ""
-                            } ${day === today ? "day-cell--today" : ""}`}
-                    >
-                        {day}
-                    </motion.div>
-                ))}
+                {PLACEHOLDER_DAYS.map((day, index) => {
+                    const isEmpty = day === null;
+                    const isToday = day === today;
+                    const isWeekendDay = !isEmpty && isWeekend(index);
+
+                    return (
+                        <motion.div
+                            key={index}
+                            variants={cellVariants}
+                            whileHover={
+                                !isEmpty
+                                    ? { scale: 1.12, transition: { duration: 0.15 } }
+                                    : undefined
+                            }
+                            whileTap={
+                                !isEmpty
+                                    ? { scale: 0.9, transition: { duration: 0.1 } }
+                                    : undefined
+                            }
+                            className={[
+                                "day-cell",
+                                isEmpty ? "day-cell--disabled" : "",
+                                isToday ? "day-cell--today" : "",
+                                isWeekendDay && !isToday ? "day-cell--weekend" : "",
+                            ]
+                                .filter(Boolean)
+                                .join(" ")}
+                        >
+                            {day}
+                        </motion.div>
+                    );
+                })}
             </motion.div>
 
             {/* Selection hint */}
-            <motion.p
-                className="text-center text-muted text-xs mt-4 tracking-wide"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.8 }}
+            <motion.div
+                className="flex items-center justify-center gap-2 mt-5 mb-1"
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.9, duration: 0.4 }}
             >
-                Click dates to select a range
-            </motion.p>
+                <div
+                    className="w-1 h-1 rounded-full"
+                    style={{ background: "var(--muted-light)" }}
+                />
+                <p
+                    className="text-xs tracking-wider font-medium"
+                    style={{ color: "var(--muted)" }}
+                >
+                    Click dates to select a range
+                </p>
+                <div
+                    className="w-1 h-1 rounded-full"
+                    style={{ background: "var(--muted-light)" }}
+                />
+            </motion.div>
         </div>
     );
 }
