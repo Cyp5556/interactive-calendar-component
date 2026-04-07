@@ -190,7 +190,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.875rem 1.5rem;
+  padding: 0.5rem 1.25rem;
   border-bottom: 1px solid var(--card-border);
   background: linear-gradient(to bottom, var(--card-bg), rgba(240, 236, 231, 0.3));
 }
@@ -230,9 +230,9 @@ body {
   grid-template-columns: repeat(7, 1fr);
   gap: 0;
   text-align: center;
-  padding-bottom: 0.625rem;
+  padding-bottom: 0.375rem;
   border-bottom: 1px solid var(--card-border);
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
 }
 
 .calendar-grid-header span {
@@ -241,7 +241,7 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: var(--muted);
-  padding: 0.375rem 0;
+  padding: 0.25rem 0;
 }
 
 /* Weekend headers highlighted */
@@ -253,17 +253,17 @@ body {
 .calendar-grid-body {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 3px;
+  gap: 2px;
 }
 
 /* ── Day Cell ── */
 .day-cell {
-  aspect-ratio: 1;
   display: flex;
   align-items: center;
   justify-content: center;
+  height: clamp(36px, 5.5vh, 52px);
   border-radius: var(--radius-sm);
-  font-size: 0.9rem;
+  font-size: 0.875rem;
   font-weight: 500;
   color: var(--foreground);
   cursor: pointer;
@@ -511,27 +511,24 @@ body {
   .calendar-card::before,
   .calendar-card::after {
     display: none;
-    /* Remove stacked paper on mobile */
   }
 
   .hero-overlay {
-    padding: 1.75rem 1.25rem 1rem;
+    padding: 1.5rem 1.25rem 0.875rem;
   }
 
   .month-nav-bar {
-    padding: 0.75rem 1rem;
+    padding: 0.5rem 1rem;
   }
 
-  /* Larger touch targets on mobile */
   .day-cell {
-    font-size: 0.95rem;
-    min-height: 44px;
-    /* iOS accessibility minimum */
+    font-size: 0.9rem;
+    height: 40px;
   }
 
   .month-nav-btn {
-    width: 44px;
-    height: 44px;
+    width: 40px;
+    height: 40px;
   }
 
   .notes-panel {
@@ -542,18 +539,19 @@ body {
 /* Tablets */
 @media (min-width: 640px) and (max-width: 1023px) {
   .calendar-grid-body {
-    gap: 5px;
+    gap: 3px;
   }
 }
 
 /* Small phones */
 @media (max-width: 380px) {
   .day-cell {
-    font-size: 0.85rem;
+    font-size: 0.82rem;
+    height: 36px;
     border-radius: 6px;
   }
 
   .month-nav-bar {
-    padding: 0.625rem 0.75rem;
+    padding: 0.375rem 0.75rem;
   }
 }

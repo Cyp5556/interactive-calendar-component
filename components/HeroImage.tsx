@@ -13,7 +13,7 @@ export default function HeroImage({ month, year, imageSrc }: HeroImageProps) {
   return (
     <motion.div
       className="hero-image-wrapper w-full"
-      style={{ height: "clamp(240px, 42vh, 400px)" }}
+      style={{ height: "clamp(160px, 24vh, 260px)" }}
       initial={{ opacity: 0, scale: 1.02 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.7, ease: "easeOut" }}

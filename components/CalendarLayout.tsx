@@ -10,7 +10,7 @@ export default function CalendarLayout() {
     const currentYear = 2026;
 
     return (
-        <div className="min-h-screen flex items-center justify-center px-4 py-6 sm:px-6 sm:py-8 md:p-10 lg:p-12">
+        <div className="min-h-screen flex items-start justify-center px-4 py-4 sm:px-6 sm:py-5 md:px-10 md:py-6 lg:px-12 lg:py-8">
             <motion.div
                 className="w-full max-w-[1100px]"
                 initial={{ opacity: 0, y: 30 }}
@@ -19,7 +19,7 @@ export default function CalendarLayout() {
             >
                 {/* ── Title ── */}
                 <motion.div
-                    className="text-center mb-6 sm:mb-8"
+                    className="text-center mb-4 sm:mb-5"
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.15, duration: 0.5 }}
@@ -33,7 +33,7 @@ export default function CalendarLayout() {
                 </motion.div>
 
                 {/* ── Main Grid: Calendar (left) | Notes (right) ── */}
-                <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] xl:grid-cols-[1fr_360px] gap-5 sm:gap-6 lg:gap-7 items-start">
+                <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] xl:grid-cols-[1fr_340px] gap-4 sm:gap-5 lg:gap-6 items-start">
                     {/* ─── Left Panel: Wall Calendar Card ─── */}
                     <motion.div
                         className="calendar-card"
@@ -126,7 +126,7 @@ export default function CalendarLayout() {
 
                 {/* ── Footer ── */}
                 <motion.div
-                    className="text-center mt-7 sm:mt-9"
+                    className="text-center mt-5 sm:mt-6"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 1.1 }}

@@ -11,13 +11,13 @@ import {
 export default function NotesPanel() {
     return (
         <motion.div
-            className="notes-panel p-5 sm:p-6"
+            className="notes-panel p-4 sm:p-5"
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.55, ease: "easeOut" }}
         >
             {/* ── Header ── */}
-            <div className="flex items-center justify-between mb-5 pt-1">
+            <div className="flex items-center justify-between mb-3.5 pt-0.5">
                 <div className="flex items-center gap-3">
                     <motion.div
                         className="flex items-center justify-center w-9 h-9 rounded-xl"
@@ -58,13 +58,13 @@ export default function NotesPanel() {
 
             {/* ── Divider ── */}
             <div
-                className="h-px mb-4"
+                className="h-px mb-3"
                 style={{ background: "var(--card-border)" }}
             />
 
             {/* ── Pinned hint card ── */}
             <motion.div
-                className="notes-pin-card mb-5"
+                className="notes-pin-card mb-4"
                 initial={{ opacity: 0, x: -12 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.65, duration: 0.4 }}
@@ -95,7 +95,7 @@ export default function NotesPanel() {
             </motion.div>
 
             {/* ── Textarea ── */}
-            <div className="relative mb-4">
+            <div className="relative mb-3">
                 <label
                     className="block text-[11px] font-semibold uppercase tracking-wider mb-2"
                     style={{ color: "var(--muted)" }}

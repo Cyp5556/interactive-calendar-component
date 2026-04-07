@@ -51,7 +51,7 @@ export default function CalendarGrid() {
     };
 
     return (
-        <div className="px-4 py-4 sm:px-5 md:px-6 md:py-5">
+        <div className="px-4 py-2.5 sm:px-5 md:px-6 md:py-3">
             {/* Weekday headers */}
             <div className="calendar-grid-header mb-1">
                 {DAYS_OF_WEEK.map((day) => (
@@ -102,7 +102,7 @@ export default function CalendarGrid() {
 
             {/* Selection hint */}
             <motion.div
-                className="flex items-center justify-center gap-2 mt-5 mb-1"
+                className="flex items-center justify-center gap-2 mt-3 mb-0.5"
                 initial={{ opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.9, duration: 0.4 }}
