@@ -20,6 +20,8 @@ interface DayCellProps {
     inRange: boolean;
     /** Whether this date has a saved note */
     hasNote: boolean;
+    /** Truncated note preview text (null if no note) */
+    notePreview: string | null;
     /** Click handler */
     onClick: (date: Dayjs) => void;
 }
@@ -43,6 +45,7 @@ export default function DayCell({
     isEnd,
     inRange,
     hasNote,
+    notePreview,
     onClick,
 }: DayCellProps) {
     const isEmpty = day === null || date === null;
@@ -58,6 +61,7 @@ export default function DayCell({
         isStart ? "day-cell--selected-start" : "",
         isEnd ? "day-cell--selected-end" : "",
         inRange ? "day-cell--in-range" : "",
+        hasNote && notePreview && !isToday && !isStart && !isEnd ? "day-cell--has-note" : "",
     ]
         .filter(Boolean)
         .join(" ");
@@ -87,7 +91,7 @@ export default function DayCell({
             tabIndex={!isEmpty ? 0 : undefined}
             aria-label={
                 date
-                    ? `${date.format("MMMM D, YYYY")}${isStart ? " (start of range)" : ""}${isEnd ? " (end of range)" : ""}${inRange ? " (in selected range)" : ""}`
+                    ? `${date.format("MMMM D, YYYY")}${isStart ? " (start of range)" : ""}${isEnd ? " (end of range)" : ""}${inRange ? " (in selected range)" : ""}${notePreview ? ` – Note: ${notePreview}` : ""}`
                     : undefined
             }
             onKeyDown={(e) => {
@@ -96,8 +100,11 @@ export default function DayCell({
                     onClick(date);
                 }
             }}
+            // Store note text in data attribute for pure CSS tooltip
+            data-note={hasNote && notePreview ? notePreview : undefined}
         >
             {day}
+
             {/* Note indicator dot */}
             {hasNote && !isStart && !isEnd && !isToday && (
                 <span

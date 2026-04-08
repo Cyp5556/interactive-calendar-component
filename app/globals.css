@@ -98,7 +98,6 @@ body {
   border: 1px solid var(--card-border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lg);
-  overflow: hidden;
   transition: box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1),
     transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   /* Page edge illusion — stacked paper effect */
@@ -137,7 +136,7 @@ body {
 .hero-image-wrapper {
   position: relative;
   overflow: hidden;
-  /* No border-radius on top since card handles it */
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
 }
 
 .hero-image-wrapper img {
@@ -569,5 +568,66 @@ body {
 
   .month-nav-bar {
     padding: 0.375rem 0.75rem;
+  }
+}
+
+/* ── Note Preview Tooltip (pure CSS via data-note attr) ── */
+.day-cell--has-note::before {
+  content: "📝 " attr(data-note);
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+  width: max-content;
+  max-width: 220px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  box-shadow: var(--shadow-md);
+  pointer-events: none;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.45;
+  color: var(--foreground);
+  word-break: break-word;
+  white-space: normal;
+  opacity: 0;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  transform: translateX(-50%) translateY(4px);
+}
+
+/* Tooltip arrow */
+.day-cell--has-note::after {
+  content: "";
+  position: absolute;
+  bottom: calc(100% + 4px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+  border: 5px solid transparent;
+  border-top-color: var(--card-border);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.18s ease;
+}
+
+/* Show on hover */
+.day-cell--has-note:hover::before {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.day-cell--has-note:hover::after {
+  opacity: 1;
+}
+
+/* Hide tooltip on touch devices — dot indicator is sufficient */
+@media (hover: none) {
+
+  .day-cell--has-note::before,
+  .day-cell--has-note::after {
+    display: none !important;
   }
 }

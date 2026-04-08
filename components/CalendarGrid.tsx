@@ -21,6 +21,8 @@ interface CalendarGridProps {
     isInRange: (date: Dayjs) => boolean;
     /** Check if a date has a saved note */
     dateHasNote: (date: Dayjs) => boolean;
+    /** Get truncated note preview for a date */
+    getNotePreview: (date: Dayjs) => string | null;
 }
 
 /**
@@ -74,6 +76,7 @@ export default function CalendarGrid({
     isEndDate,
     isInRange,
     dateHasNote,
+    getNotePreview,
 }: CalendarGridProps) {
     const today = dayjs();
     const cells = generateMonthGrid(year, month);
@@ -114,6 +117,7 @@ export default function CalendarGrid({
                             isEnd={cellDate ? isEndDate(cellDate) : false}
                             inRange={cellDate ? isInRange(cellDate) : false}
                             hasNote={cellDate ? dateHasNote(cellDate) : false}
+                            notePreview={cellDate ? getNotePreview(cellDate) : null}
                             onClick={onDateClick}
                         />
                     );

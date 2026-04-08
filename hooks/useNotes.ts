@@ -27,6 +27,8 @@ export interface UseNotesReturn {
     activeKey: string | null;
     /** Check if a specific date has any note associated */
     dateHasNote: (date: Dayjs) => boolean;
+    /** Get a truncated preview of the note for a given date */
+    getNotePreview: (date: Dayjs) => string | null;
     /** Total number of saved notes */
     noteCount: number;
 }
@@ -148,6 +150,25 @@ export function useNotes(
         [allNotes]
     );
 
+    const getNotePreview = useCallback(
+        (date: Dayjs): string | null => {
+            const dateStr = date.format("YYYY-MM-DD");
+            for (const [key, text] of Object.entries(allNotes)) {
+                if (key === dateStr) {
+                    return text.length > 60 ? text.slice(0, 60) + "…" : text;
+                }
+                if (key.includes("_")) {
+                    const [start, end] = key.split("_");
+                    if (dateStr >= start && dateStr <= end) {
+                        return text.length > 60 ? text.slice(0, 60) + "…" : text;
+                    }
+                }
+            }
+            return null;
+        },
+        [allNotes]
+    );
+
     const noteCount = Object.keys(allNotes).length;
 
     return {
@@ -159,6 +180,7 @@ export function useNotes(
         justSaved,
         activeKey,
         dateHasNote,
+        getNotePreview,
         noteCount,
     };
 }

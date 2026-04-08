@@ -47,6 +47,7 @@ export default function CalendarLayout() {
         isDirty,
         justSaved,
         dateHasNote,
+        getNotePreview,
         noteCount,
     } = useNotes(startDate, endDate);
 
@@ -136,7 +137,7 @@ export default function CalendarLayout() {
                         <HeroImage
                             month={monthName}
                             year={year}
-                            imageSrc="/hero-april.png"
+                            monthIndex={month}
                         />
 
                         {/* Separator */}
@@ -215,7 +216,6 @@ export default function CalendarLayout() {
                             </motion.button>
                         </div>
 
-                        {/* Calendar Grid */}
                         <CalendarGrid
                             month={month}
                             year={year}
@@ -224,6 +224,7 @@ export default function CalendarLayout() {
                             isEndDate={isEndDate}
                             isInRange={isInRange}
                             dateHasNote={dateHasNote}
+                            getNotePreview={getNotePreview}
                         />
 
                         {/* ── Selected Range Indicator ── */}
@@ -288,20 +289,6 @@ export default function CalendarLayout() {
                     </motion.div>
                 </div>
 
-                {/* ── Footer ── */}
-                <motion.div
-                    className="text-center mt-5 sm:mt-6"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 1.1 }}
-                >
-                    <p
-                        className="text-[10px] tracking-[0.25em] uppercase font-medium"
-                        style={{ color: "var(--muted-light)" }}
-                    >
-                        ✦ Built with Next.js · Ant Design · Framer Motion ✦
-                    </p>
-                </motion.div>
             </motion.div>
         </div>
     );
