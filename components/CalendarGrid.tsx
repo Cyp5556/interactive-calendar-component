@@ -1,22 +1,57 @@
 "use client";
 
 import { motion } from "framer-motion";
+import dayjs, { Dayjs } from "dayjs";
+import DayCell from "./DayCell";
 
 const DAYS_OF_WEEK = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-// Static placeholder for April 2026
-const PLACEHOLDER_DAYS: (number | null)[] = [
-    // Row 1: April starts on Wednesday (index 3)
-    null, null, null, 1, 2, 3, 4,
-    // Row 2
-    5, 6, 7, 8, 9, 10, 11,
-    // Row 3
-    12, 13, 14, 15, 16, 17, 18,
-    // Row 4
-    19, 20, 21, 22, 23, 24, 25,
-    // Row 5
-    26, 27, 28, 29, 30, null, null,
-];
+interface CalendarGridProps {
+    /** The month to display (0-indexed: 0 = January) */
+    month: number;
+    /** The year to display */
+    year: number;
+    /** Handle date click from parent */
+    onDateClick: (date: Dayjs) => void;
+    /** Check if date is range start */
+    isStartDate: (date: Dayjs) => boolean;
+    /** Check if date is range end */
+    isEndDate: (date: Dayjs) => boolean;
+    /** Check if date is in range */
+    isInRange: (date: Dayjs) => boolean;
+}
+
+/**
+ * Generates the grid cells for a given month.
+ * Returns an array of (Dayjs | null) where null = empty padding cell.
+ */
+function generateMonthGrid(year: number, month: number): (Dayjs | null)[] {
+    const firstDay = dayjs().year(year).month(month).startOf("month");
+    const daysInMonth = firstDay.daysInMonth();
+    const startDayOfWeek = firstDay.day(); // 0 = Sunday
+
+    const cells: (Dayjs | null)[] = [];
+
+    // Leading empty cells
+    for (let i = 0; i < startDayOfWeek; i++) {
+        cells.push(null);
+    }
+
+    // Day cells
+    for (let d = 1; d <= daysInMonth; d++) {
+        cells.push(dayjs().year(year).month(month).date(d));
+    }
+
+    // Trailing empty cells to complete the last row
+    const remaining = cells.length % 7;
+    if (remaining > 0) {
+        for (let i = 0; i < 7 - remaining; i++) {
+            cells.push(null);
+        }
+    }
+
+    return cells;
+}
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -29,26 +64,16 @@ const containerVariants = {
     },
 };
 
-const cellVariants = {
-    hidden: { opacity: 0, y: 8, scale: 0.85 },
-    visible: {
-        opacity: 1,
-        y: 0,
-        scale: 1,
-        transition: { type: "spring", stiffness: 400, damping: 25 },
-    },
-};
-
-export default function CalendarGrid() {
-    const today = 8; // April 8, 2026
-
-    /**
-     * Check if a given index falls on a weekend column (Sun=0, Sat=6)
-     */
-    const isWeekend = (index: number) => {
-        const col = index % 7;
-        return col === 0 || col === 6;
-    };
+export default function CalendarGrid({
+    month,
+    year,
+    onDateClick,
+    isStartDate,
+    isEndDate,
+    isInRange,
+}: CalendarGridProps) {
+    const today = dayjs();
+    const cells = generateMonthGrid(year, month);
 
     return (
         <div className="px-4 py-2.5 sm:px-5 md:px-6 md:py-3">
@@ -65,37 +90,28 @@ export default function CalendarGrid() {
                 variants={containerVariants}
                 initial="hidden"
                 animate="visible"
+                key={`${year}-${month}`} // Re-animate on month change
             >
-                {PLACEHOLDER_DAYS.map((day, index) => {
-                    const isEmpty = day === null;
-                    const isToday = day === today;
-                    const isWeekendDay = !isEmpty && isWeekend(index);
+                {cells.map((cellDate, index) => {
+                    const day = cellDate ? cellDate.date() : null;
+                    const isCurrentDay = cellDate
+                        ? cellDate.isSame(today, "day")
+                        : false;
+                    const col = index % 7;
+                    const isWeekend = col === 0 || col === 6;
 
                     return (
-                        <motion.div
-                            key={index}
-                            variants={cellVariants}
-                            whileHover={
-                                !isEmpty
-                                    ? { scale: 1.12, transition: { duration: 0.15 } }
-                                    : undefined
-                            }
-                            whileTap={
-                                !isEmpty
-                                    ? { scale: 0.9, transition: { duration: 0.1 } }
-                                    : undefined
-                            }
-                            className={[
-                                "day-cell",
-                                isEmpty ? "day-cell--disabled" : "",
-                                isToday ? "day-cell--today" : "",
-                                isWeekendDay && !isToday ? "day-cell--weekend" : "",
-                            ]
-                                .filter(Boolean)
-                                .join(" ")}
-                        >
-                            {day}
-                        </motion.div>
+                        <DayCell
+                            key={`${year}-${month}-${index}`}
+                            date={cellDate}
+                            day={day}
+                            isToday={isCurrentDay}
+                            isWeekend={isWeekend}
+                            isStart={cellDate ? isStartDate(cellDate) : false}
+                            isEnd={cellDate ? isEndDate(cellDate) : false}
+                            inRange={cellDate ? isInRange(cellDate) : false}
+                            onClick={onDateClick}
+                        />
                     );
                 })}
             </motion.div>

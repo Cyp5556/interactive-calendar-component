@@ -318,20 +318,36 @@ body {
   background: rgba(255, 255, 255, 0.8);
 }
 
-/* Selection states (for later logic) */
+/* Selection states */
 .day-cell--selected-start,
 .day-cell--selected-end {
   background: var(--accent) !important;
   color: #fff !important;
   font-weight: 700;
   border-radius: var(--radius-sm);
-  box-shadow: 0 3px 12px rgba(201, 123, 90, 0.3);
+  box-shadow: 0 3px 12px rgba(201, 123, 90, 0.35);
+  transform: scale(1.05);
+  z-index: 3;
+}
+
+.day-cell--selected-start:hover,
+.day-cell--selected-end:hover {
+  background: var(--accent-dark) !important;
+  color: #fff !important;
+  transform: scale(1.12);
+  box-shadow: 0 4px 16px rgba(201, 123, 90, 0.4);
 }
 
 .day-cell--in-range {
   background: var(--accent-light);
   color: var(--accent-dark);
-  border-radius: 0;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.day-cell--in-range:hover {
+  background: var(--accent) !important;
+  color: #fff !important;
 }
 
 .day-cell--disabled {

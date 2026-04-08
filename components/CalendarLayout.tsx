@@ -1,13 +1,41 @@
 "use client";
 
 import { motion } from "framer-motion";
+import dayjs from "dayjs";
 import HeroImage from "./HeroImage";
 import CalendarGrid from "./CalendarGrid";
 import NotesPanel from "./NotesPanel";
+import { useDateRange } from "@/hooks/useDateRange";
+
+const MONTH_NAMES = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December",
+];
 
 export default function CalendarLayout() {
-    const currentMonth = "April";
-    const currentYear = 2026;
+    const currentMonth = dayjs().month(); // 0-indexed (3 = April)
+    const currentYear = dayjs().year();
+
+    // Date range selection state — lifted here for later NotesPanel access
+    const {
+        startDate,
+        endDate,
+        handleDateClick,
+        resetSelection,
+        isStartDate,
+        isEndDate,
+        isInRange,
+        hasRange,
+    } = useDateRange();
+
+    const monthName = MONTH_NAMES[currentMonth];
+
+    // Format the selected range for display
+    const rangeLabel = (() => {
+        if (!startDate) return null;
+        if (!endDate) return startDate.format("MMM D, YYYY");
+        return `${startDate.format("MMM D")} – ${endDate.format("MMM D, YYYY")}`;
+    })();
 
     return (
         <div className="min-h-screen flex items-start justify-center px-4 py-4 sm:px-6 sm:py-5 md:px-10 md:py-6 lg:px-12 lg:py-8">
@@ -43,12 +71,12 @@ export default function CalendarLayout() {
                     >
                         {/* Hero Image */}
                         <HeroImage
-                            month={currentMonth}
+                            month={monthName}
                             year={currentYear}
                             imageSrc="/hero-april.png"
                         />
 
-                        {/* Separator — tear-edge effect */}
+                        {/* Separator */}
                         <div className="calendar-separator" />
 
                         {/* Month Navigation Bar */}
@@ -59,16 +87,7 @@ export default function CalendarLayout() {
                                 whileHover={{ scale: 1.1 }}
                                 whileTap={{ scale: 0.9 }}
                             >
-                                <svg
-                                    width="16"
-                                    height="16"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="2.5"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                >
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                                     <polyline points="15 18 9 12 15 6" />
                                 </svg>
                             </motion.button>
@@ -78,7 +97,7 @@ export default function CalendarLayout() {
                                     className="text-xl sm:text-2xl font-bold tracking-tight"
                                     style={{ fontFamily: "var(--font-display)" }}
                                 >
-                                    {currentMonth}
+                                    {monthName}
                                 </h3>
                                 <p
                                     className="text-[11px] font-medium tracking-widest uppercase -mt-0.5"
@@ -94,23 +113,57 @@ export default function CalendarLayout() {
                                 whileHover={{ scale: 1.1 }}
                                 whileTap={{ scale: 0.9 }}
                             >
-                                <svg
-                                    width="16"
-                                    height="16"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="2.5"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                >
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                                     <polyline points="9 6 15 12 9 18" />
                                 </svg>
                             </motion.button>
                         </div>
 
                         {/* Calendar Grid */}
-                        <CalendarGrid />
+                        <CalendarGrid
+                            month={currentMonth}
+                            year={currentYear}
+                            onDateClick={handleDateClick}
+                            isStartDate={isStartDate}
+                            isEndDate={isEndDate}
+                            isInRange={isInRange}
+                        />
+
+                        {/* ── Selected Range Indicator ── */}
+                        {rangeLabel && (
+                            <motion.div
+                                className="flex items-center justify-center gap-3 px-4 py-2 border-t"
+                                style={{ borderColor: "var(--card-border)" }}
+                                initial={{ opacity: 0, y: 8 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.3 }}
+                            >
+                                <p
+                                    className="text-xs font-semibold tracking-wide"
+                                    style={{ color: "var(--accent-dark)" }}
+                                >
+                                    {hasRange ? "📅" : "📌"} {rangeLabel}
+                                </p>
+                                <button
+                                    onClick={resetSelection}
+                                    className="text-[10px] font-medium px-2 py-0.5 rounded-full transition-colors"
+                                    style={{
+                                        background: "var(--surface)",
+                                        color: "var(--muted)",
+                                    }}
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.background = "var(--accent-light)";
+                                        e.currentTarget.style.color = "var(--accent-dark)";
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.background = "var(--surface)";
+                                        e.currentTarget.style.color = "var(--muted)";
+                                    }}
+                                >
+                                    Clear
+                                </button>
+                            </motion.div>
+                        )}
                     </motion.div>
 
                     {/* ─── Right Panel: Notes ─── */}
