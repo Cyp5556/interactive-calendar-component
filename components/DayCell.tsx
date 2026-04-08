@@ -18,6 +18,8 @@ interface DayCellProps {
     isEnd: boolean;
     /** Whether this falls within the selected range */
     inRange: boolean;
+    /** Whether this date has a saved note */
+    hasNote: boolean;
     /** Click handler */
     onClick: (date: Dayjs) => void;
 }
@@ -40,6 +42,7 @@ export default function DayCell({
     isStart,
     isEnd,
     inRange,
+    hasNote,
     onClick,
 }: DayCellProps) {
     const isEmpty = day === null || date === null;
@@ -95,6 +98,13 @@ export default function DayCell({
             }}
         >
             {day}
+            {/* Note indicator dot */}
+            {hasNote && !isStart && !isEnd && !isToday && (
+                <span
+                    className="absolute bottom-[3px] left-1/2 -translate-x-1/2 w-[5px] h-[5px] rounded-full"
+                    style={{ background: "var(--accent)" }}
+                />
+            )}
         </motion.div>
     );
 }

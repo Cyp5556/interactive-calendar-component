@@ -19,6 +19,8 @@ interface CalendarGridProps {
     isEndDate: (date: Dayjs) => boolean;
     /** Check if date is in range */
     isInRange: (date: Dayjs) => boolean;
+    /** Check if a date has a saved note */
+    dateHasNote: (date: Dayjs) => boolean;
 }
 
 /**
@@ -71,6 +73,7 @@ export default function CalendarGrid({
     isStartDate,
     isEndDate,
     isInRange,
+    dateHasNote,
 }: CalendarGridProps) {
     const today = dayjs();
     const cells = generateMonthGrid(year, month);
@@ -90,7 +93,7 @@ export default function CalendarGrid({
                 variants={containerVariants}
                 initial="hidden"
                 animate="visible"
-                key={`${year}-${month}`} // Re-animate on month change
+                key={`${year}-${month}`}
             >
                 {cells.map((cellDate, index) => {
                     const day = cellDate ? cellDate.date() : null;
@@ -110,6 +113,7 @@ export default function CalendarGrid({
                             isStart={cellDate ? isStartDate(cellDate) : false}
                             isEnd={cellDate ? isEndDate(cellDate) : false}
                             inRange={cellDate ? isInRange(cellDate) : false}
+                            hasNote={cellDate ? dateHasNote(cellDate) : false}
                             onClick={onDateClick}
                         />
                     );

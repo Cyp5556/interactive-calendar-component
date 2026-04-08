@@ -6,6 +6,7 @@ import HeroImage from "./HeroImage";
 import CalendarGrid from "./CalendarGrid";
 import NotesPanel from "./NotesPanel";
 import { useDateRange } from "@/hooks/useDateRange";
+import { useNotes } from "@/hooks/useNotes";
 
 const MONTH_NAMES = [
     "January", "February", "March", "April", "May", "June",
@@ -13,10 +14,10 @@ const MONTH_NAMES = [
 ];
 
 export default function CalendarLayout() {
-    const currentMonth = dayjs().month(); // 0-indexed (3 = April)
+    const currentMonth = dayjs().month();
     const currentYear = dayjs().year();
 
-    // Date range selection state — lifted here for later NotesPanel access
+    // Date range selection state
     const {
         startDate,
         endDate,
@@ -28,7 +29,21 @@ export default function CalendarLayout() {
         hasRange,
     } = useDateRange();
 
+    // Notes persistence (linked to current selection)
+    const {
+        noteText,
+        setNoteText,
+        saveNote,
+        deleteNote,
+        isDirty,
+        justSaved,
+        dateHasNote,
+        noteCount,
+    } = useNotes(startDate, endDate);
+
     const monthName = MONTH_NAMES[currentMonth];
+    const monthLabel = `${monthName} ${currentYear}`;
+    const hasSelection = startDate !== null;
 
     // Format the selected range for display
     const rangeLabel = (() => {
@@ -127,6 +142,7 @@ export default function CalendarLayout() {
                             isStartDate={isStartDate}
                             isEndDate={isEndDate}
                             isInRange={isInRange}
+                            dateHasNote={dateHasNote}
                         />
 
                         {/* ── Selected Range Indicator ── */}
@@ -145,7 +161,9 @@ export default function CalendarLayout() {
                                     {hasRange ? "📅" : "📌"} {rangeLabel}
                                 </p>
                                 <button
-                                    onClick={resetSelection}
+                                    onClick={() => {
+                                        resetSelection();
+                                    }}
                                     className="text-[10px] font-medium px-2 py-0.5 rounded-full transition-colors"
                                     style={{
                                         background: "var(--surface)",
@@ -173,7 +191,19 @@ export default function CalendarLayout() {
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.25, duration: 0.5 }}
                     >
-                        <NotesPanel />
+                        <NotesPanel
+                            rangeLabel={rangeLabel}
+                            hasRange={hasRange}
+                            hasSelection={hasSelection}
+                            noteText={noteText}
+                            onNoteChange={setNoteText}
+                            onSave={saveNote}
+                            onDelete={deleteNote}
+                            isDirty={isDirty}
+                            justSaved={justSaved}
+                            noteCount={noteCount}
+                            monthLabel={monthLabel}
+                        />
                     </motion.div>
                 </div>
 
