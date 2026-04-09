@@ -1,36 +1,175 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🗓️ Interactive Calendar Component
 
-## Getting Started
+A polished, responsive, and feature-rich interactive calendar component built using **Next.js**, inspired by a physical wall calendar design.
 
-First, run the development server:
+This project was developed as part of a frontend engineering challenge, focusing on **UI/UX quality, component architecture, and interactive functionality**.
+
+---
+
+## 🚀 Live Demo
+
+🔗 [View Live Project](https://interactive-calendar-component-mocha.vercel.app/)
+
+---
+
+## 🎥 Demo Video
+
+🔗 [Watch Demo](https://www.loom.com/share/c3bf78e72a1b404eb627a4ff38a11f3f)
+
+---
+
+## ✨ Features
+
+### 🎨 UI / UX
+
+* Wall calendar aesthetic with dynamic **month-based hero images**
+* Clean, modern, and premium design
+* Fully responsive (desktop + mobile)
+* Smooth hover effects and animations
+
+---
+
+### 📅 Calendar Functionality
+
+* Dynamic **month navigation** (previous / next)
+* Accurate calendar grid rendering
+* Today’s date highlight
+* No internal scrolling — full calendar visible
+
+---
+
+### 🔁 Date Range Selection
+
+* Select start and end date
+* Automatic range highlighting (connected UI)
+* Smart edge handling:
+
+  * Auto-swap if end < start
+  * Reset on re-selection
+
+---
+
+### 📝 Notes System
+
+* Add notes to a specific date or date range
+* Notes persist using `localStorage`
+* Auto-load notes when re-selecting dates
+* Edit, update, and delete notes
+* Visual indicators (dots) on dates with notes
+* Hover preview of saved notes
+
+---
+
+### ⚡ UX Enhancements
+
+* Context-aware UI (selection vs no selection)
+* Save state feedback ("Saved!" toast)
+* Character count in notes input
+* Smooth animations using Framer Motion
+
+---
+
+## 🧠 System Design Overview
+
+This is a **frontend-only architecture** designed with clean separation of concerns and modular components.
+
+### 🧩 Component Structure
+
+* `CalendarContainer` → Main layout
+* `CalendarHeader` → Month navigation
+* `CalendarGrid` → Calendar rendering logic
+* `DayCell` → Individual date interaction
+* `NotesPanel` → Notes handling and UI
+
+---
+
+### 🔄 State Management
+
+Handled using React hooks:
+
+* `currentMonth` → Controls visible calendar
+* `startDate`, `endDate` → Range selection
+* `notes` → Stored and retrieved from localStorage
+
+---
+
+### 💾 Data Persistence
+
+* Uses browser `localStorage`
+* Key format:
+
+  * Single date → `YYYY-MM-DD`
+  * Date range → `YYYY-MM-DD_YYYY-MM-DD`
+
+---
+
+### ⚙️ Data Flow
+
+1. User selects date or range
+2. State updates (`startDate`, `endDate`)
+3. UI reflects selection
+4. Notes saved/retrieved via localStorage
+5. Calendar updates dynamically on month change
+
+---
+
+## 🛠️ Tech Stack
+
+* **Next.js (App Router)**
+* **TypeScript**
+* **Tailwind CSS**
+* **Ant Design**
+* **Day.js**
+* **Framer Motion**
+
+---
+
+## 📦 Installation & Setup
 
 ```bash
+git clone https://github.com/your-username/interactive-calendar-component.git
+cd interactive-calendar-component
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 📱 Responsiveness
 
-To learn more about Next.js, take a look at the following resources:
+* Desktop → side-by-side layout
+* Mobile → stacked layout
+* Optimized for usability across devices
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🎯 Key Engineering Decisions
 
-## Deploy on Vercel
+* Prioritized **UI/UX before logic implementation**
+* Used **component-based architecture** for scalability
+* Implemented **localStorage** for persistence (as per requirement)
+* Ensured **no internal scroll** for better usability
+* Focused on **clean and maintainable code**
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🚧 Future Improvements
+
+* Year selector
+* Drag-based range selection
+* Cloud sync for notes
+* Holiday/event integration
+
+---
+
+## 🙌 Acknowledgement
+
+This project was built as part of a frontend engineering challenge to demonstrate strong fundamentals in **React, UI design, and product thinking**.
+
+---
